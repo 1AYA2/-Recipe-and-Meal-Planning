@@ -1,0 +1,42 @@
+<div class="container mt-6" style="padding-left: 50px; margin-top: 20px;">
+  <ng-container *ngIf="user$ | async as user">
+    <div class="form-container mat-elevation-z5 text-center">
+      <h1>Update Profile</h1>
+      <div class="profile-image position-relative mt-3">
+        <img
+          width="120"
+          height="120"
+          class="rounded-circle border border-dark"
+          [src]="user.photoURL ?? '/assets/profile.png'"
+          alt="Profile Picture"
+        >
+        
+        <div>{{ user.displayName }}</div>
+        <button class="btn btn-warning btn-sm" style="margin-right: 5px;" (click)="openFollowersPopup()">Show Followers</button>
+        <button class="btn btn-warning btn-sm " style="margin-right: 5px;" (click)="openFollowingPopup()">Show Following</button>
+        <button *ngIf="user.uid === currentUserUid" class="btn btn-warning btn-sm " (click)="inputField.click()">
+          <i class="fas fa-user-edit"></i>
+        </button>
+      </div>
+      <input #inputField hidden type="file" (change)="uploadFile($event, user)" />
+      <div class="row row-cols-1 row-cols-md-2 g-4 mt-5" style="margin-left:50px;">
+        <div class="col" *ngFor="let recipe of recipes$ | async">
+          <div class="card h-100">
+            <img [src]="recipe.recipe_image" class="card-img-top" alt="Card Image">
+            <div class="card-body">
+              <h5 class="card-title">{{ recipe.recipe_name }}</h5>
+              <h5 class="text-warning">Cooking Time:</h5>
+              <p>{{recipe.recipe_cookingTime}}</p>
+              <h5 class="text-warning">Cusine</h5>
+              <p>{{recipe.recipe_cuisine}}</p>
+             <button (click)="showRecipeDetails(recipe.recipe_id)" type="button" class="btn btn-warning" style="margin-right:5px;"><a>Show More</a></button>
+             <a *ngIf="user.uid === currentUserUid" (click)="deleteRecipe(recipe.recipe_id)" class="btn btn-warning btn-sm position-absolute bottom-0 end-0">
+              <i class="fas fa-trash-alt"></i>
+            </a>   
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
